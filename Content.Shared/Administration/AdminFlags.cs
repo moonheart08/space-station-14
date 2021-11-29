@@ -66,6 +66,16 @@ namespace Content.Shared.Administration
         Logs = 1 << 9,
 
         /// <summary>
+        ///     Lets you use query commands, i.e. forall
+        /// </summary>
+        Query = 1 << 10,
+
+        /// <summary>
+        ///     Lets you manipulate the round, i.e. startround
+        /// </summary>
+        Round = 1 << 11,
+
+        /// <summary>
         ///     Dangerous host permissions like scsi.
         /// </summary>
         Host = 1u << 31,
