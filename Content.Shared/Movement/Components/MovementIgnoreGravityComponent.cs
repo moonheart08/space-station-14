@@ -38,11 +38,11 @@ namespace Content.Shared.Movement.Components
 
             mapManager ??= IoCManager.Resolve<IMapManager>();
             var grid = mapManager.GetGrid(gridId);
-            var invSys = EntitySystem.Get<InventorySystem>();
 
-            if (invSys.TryGetSlotEntity(entity, "shoes", out var ent))
+            if (entityManager.TryGetComponent<SharedInventoryComponent>(entity, out var inv))
             {
-                if (entityManager.TryGetComponent<SharedMagbootsComponent>(ent, out var boots) && boots.On)
+
+                if (inv.TryGetSlot(EquipmentSlotDefines.Slots.SHOES, out var ent) && entityManager.TryGetComponent<SharedMagbootsComponent>(ent, out var boots) && boots.On)
                     return false;
             }
 
