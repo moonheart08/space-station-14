@@ -42,7 +42,6 @@ namespace Content.Server.GameTicking
             DebugTools.Assert(!_postInitialized);
 
             // Initialize the other parts of the game ticker.
-            InitializeStatusShell();
             InitializeCVars();
             InitializePlayer();
             InitializeLobbyMusic();
