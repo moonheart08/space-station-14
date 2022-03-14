@@ -9,10 +9,13 @@ using Content.Client.Lobby.UI;
 using Content.Client.Preferences;
 using Content.Client.Preferences.UI;
 using Content.Client.Resources;
+using Content.Client.Viewport;
 using Content.Client.Voting;
 using Content.Shared.GameTicking;
 using Robust.Client;
 using Robust.Client.Console;
+using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
 using Robust.Client.ResourceManagement;
@@ -42,6 +45,7 @@ namespace Content.Client.Lobby
         [Dependency] private readonly IClientPreferencesManager _preferencesManager = default!;
         [Dependency] private readonly IGameTiming _gameTiming = default!;
         [Dependency] private readonly IVoteManager _voteManager = default!;
+        [Dependency] private readonly ViewportManager _viewportManager = default!;
 
         [ViewVariables] private CharacterSetupGui? _characterSetup;
         [ViewVariables] private LobbyGui? _lobby;
@@ -56,6 +60,8 @@ namespace Content.Client.Lobby
             LayoutContainer.SetAnchorPreset(_characterSetup, LayoutContainer.LayoutPreset.Wide);
 
             _lobby = new LobbyGui(_entityManager, _preferencesManager);
+            _lobby.BackgroundView.ViewportSize =
+                (EyeManager.PixelsPerMeter * 21, EyeManager.PixelsPerMeter * 15);
             _userInterfaceManager.StateRoot.AddChild(_lobby);
 
             _characterSetup.CloseButton.OnPressed += _ =>
@@ -76,7 +82,6 @@ namespace Content.Client.Lobby
             _voteManager.SetPopupContainer(_lobby.VoteContainer);
 
             _lobby.ServerName.Text = _baseClient.GameInfo?.ServerName;
-
             ChatInput.SetupChatInputHandlers(_inputManager, _lobby.Chat);
 
             UpdateLobbyUi();
@@ -130,8 +135,19 @@ namespace Content.Client.Lobby
         {
             if (_lobby == null) return;
 
-            var gameTicker = EntitySystem.Get<ClientGameTicker>();
-            if (gameTicker.IsGameStarted)
+            if (_gameTicker.LobbyCameraEntity is {Valid: true} eid && _entityManager.TryGetComponent<EyeComponent>(eid, out var eye) && eye.Eye is not null)
+            {
+                Logger.Debug("Port configured.");
+                _lobby.BackgroundView.Eye = eye.Eye;
+                _lobby.BackgroundView.ViewportSize = _lobby.PixelSize;
+            }
+            else
+            {
+                _lobby.BackgroundView.Eye = null;
+            }
+
+
+            if (_gameTicker.IsGameStarted)
             {
                 _lobby.StartTime.Text = string.Empty;
                 return;
@@ -139,13 +155,13 @@ namespace Content.Client.Lobby
 
             string text;
 
-            if (gameTicker.Paused)
+            if (_gameTicker.Paused)
             {
                 text = Loc.GetString("lobby-state-paused");
             }
             else
             {
-                var difference = gameTicker.StartTime - _gameTiming.CurTime;
+                var difference = _gameTicker.StartTime - _gameTiming.CurTime;
                 var seconds = difference.TotalSeconds;
                 if (seconds < 0)
                 {
@@ -158,6 +174,7 @@ namespace Content.Client.Lobby
             }
 
             _lobby.StartTime.Text = Loc.GetString("lobby-state-round-start-countdown-text", ("timeLeft", text));
+
         }
 
         private void PlayerManagerOnPlayerListUpdated(object? sender, EventArgs e)

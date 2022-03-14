@@ -34,6 +34,7 @@ namespace Content.Client.GameTicking.Managers
         [ViewVariables] public string? ServerInfoBlob { get; private set; }
         [ViewVariables] public TimeSpan StartTime { get; private set; }
         [ViewVariables] public new bool Paused { get; private set; }
+        [ViewVariables] public EntityUid? LobbyCameraEntity { get; private set; }
         [ViewVariables] public Dictionary<NetUserId, LobbyPlayerStatus> Status { get; private set; } = new();
         [ViewVariables] public IReadOnlyDictionary<StationId, Dictionary<string, int>> JobsAvailable => _jobsAvailable;
         [ViewVariables] public IReadOnlyDictionary<StationId, string> StationNames => _stationNames;
@@ -43,6 +44,7 @@ namespace Content.Client.GameTicking.Managers
         public event Action? LobbyReadyUpdated;
         public event Action? LobbyLateJoinStatusUpdated;
         public event Action<IReadOnlyDictionary<StationId, Dictionary<string, int>>>? LobbyJobsAvailableUpdated;
+
 
         public override void Initialize()
         {
@@ -61,9 +63,15 @@ namespace Content.Client.GameTicking.Managers
             });
             SubscribeNetworkEvent<TickerLateJoinStatusEvent>(LateJoinStatus);
             SubscribeNetworkEvent<TickerJobsAvailableEvent>(UpdateJobsAvailable);
+            SubscribeNetworkEvent<LobbyCameraSetEvent>(LobbyCameraSetHandler);
 
             Status = new Dictionary<NetUserId, LobbyPlayerStatus>();
             _initialized = true;
+        }
+
+        private void LobbyCameraSetHandler(LobbyCameraSetEvent ev)
+        {
+            LobbyCameraEntity = ev.CameraEntity;
         }
 
         private void LateJoinStatus(TickerLateJoinStatusEvent message)

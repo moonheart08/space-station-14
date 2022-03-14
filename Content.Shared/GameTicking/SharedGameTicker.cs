@@ -153,6 +153,17 @@ namespace Content.Shared.GameTicking
         }
     }
 
+    [Serializable, NetSerializable]
+    public sealed class LobbyCameraSetEvent : EntityEventArgs
+    {
+        public EntityUid? CameraEntity { get; }
+
+        public LobbyCameraSetEvent(EntityUid? cameraEntity)
+        {
+            CameraEntity = cameraEntity;
+        }
+    }
+
 
     [Serializable, NetSerializable]
     public enum LobbyPlayerStatus : sbyte

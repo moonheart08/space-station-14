@@ -9,11 +9,13 @@
          xmlns:hudUi="clr-namespace:Content.Client.HUD.UI"
          xmlns:chatUi="clr-namespace:Content.Client.Chat.UI"
          xmlns:lobbyUi="clr-namespace:Content.Client.Lobby.UI"
-         xmlns:info="clr-namespace:Content.Client.Info">
+         xmlns:info="clr-namespace:Content.Client.Info"
+         xmlns:viewport="clr-namespace:Content.Client.Viewport">
     <Control>
         <!-- Parallax background -->
-        <parallax:ParallaxControl />
+        <!--<parallax:ParallaxControl />-->
         <TextureRect Access="Public" Name = "Background" Stretch="Scale"/>
+        <viewport:ScalingViewport Access="Public" Name="BackgroundView" MouseFilter="Stop" RenderScaleMode="CeilInt"/>
         <Control Margin="10 10 10 10" >
             <!-- Left Top Panel -->
                 <PanelContainer StyleClasses="AngleRect" HorizontalAlignment="Left" Name = "LeftSideTop" VerticalExpand="True"  VerticalAlignment="Top" >
