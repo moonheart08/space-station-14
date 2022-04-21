@@ -18,13 +18,14 @@ namespace Content.Shared.Emag.Systems
 
         private void OnExamine(EntityUid uid, EmagComponent component, ExaminedEvent args)
         {
-            float timeRemaining = component.RechargeTime - component.Accumulator;
+
             args.PushMarkup(Loc.GetString("emag-charges-remaining", ("charges", component.Charges)));
-            if (component.Charges == component.MaxCharges)
+            if (component.Charges == component.MaxCharges || component.RechargeTime is null)
             {
                 args.PushMarkup(Loc.GetString("emag-max-charges"));
                 return;
             }
+            float timeRemaining = component.RechargeTime.Value - component.Accumulator;
             args.PushMarkup(Loc.GetString("emag-recharging", ("seconds", Math.Round(timeRemaining))));
         }
     }

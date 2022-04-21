@@ -34,12 +34,12 @@ namespace Content.Server.Emag
 
                 emag.Accumulator += frameTime;
 
-                if (emag.Accumulator < emag.RechargeTime)
+                if (emag.RechargeTime is null || emag.Accumulator < emag.RechargeTime)
                 {
                     continue;
                 }
 
-                emag.Accumulator -= emag.RechargeTime;
+                emag.Accumulator -= emag.RechargeTime.Value;
                 emag.Charges++;
             }
         }
