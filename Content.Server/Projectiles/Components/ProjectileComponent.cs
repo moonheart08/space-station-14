@@ -24,6 +24,7 @@ namespace Content.Server.Projectiles.Components
 
         public bool DamagedEntity;
 
+        [DataField("timeLeft")]
         public float TimeLeft { get; set; } = 10;
 
         /// <summary>

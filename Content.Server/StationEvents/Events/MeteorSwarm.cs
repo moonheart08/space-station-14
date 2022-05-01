@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
 using Content.Server.GameTicking;
+using Content.Server.Meteors;
 using Content.Server.Projectiles.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
+using Robust.Shared.Physics;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -86,6 +88,7 @@ namespace Content.Server.StationEvents.Events
 
             Box2? playableArea = null;
             var mapId = EntitySystem.Get<GameTicker>().DefaultMap;
+            var aggregateSystem = EntitySystem.Get<AggregateSystem>();
 
             foreach (var grid in _mapManager.GetAllGrids())
             {
@@ -110,9 +113,13 @@ namespace Content.Server.StationEvents.Events
                 var angle = new Angle(_robustRandom.NextFloat() * MathF.Tau);
                 var offset = angle.RotateVec(new Vector2((maximumDistance - minimumDistance) * _robustRandom.NextFloat() + minimumDistance, 0));
                 var spawnPosition = new MapCoordinates(center + offset, mapId);
-                var meteor = _entityManager.SpawnEntity("MeteorLarge", spawnPosition);
+                var meteor = _entityManager.SpawnEntity("MeteorColossal", spawnPosition);
                 var physics = _entityManager.GetComponent<PhysicsComponent>(meteor);
                 physics.BodyStatus = BodyStatus.InAir;
+                foreach (var part in _entityManager.GetComponent<TransformComponent>(meteor).ChildEntities)
+                {
+
+                }
                 physics.LinearDamping = 0f;
                 physics.AngularDamping = 0f;
                 physics.ApplyLinearImpulse(-offset.Normalized * MeteorVelocity * physics.Mass);
@@ -120,8 +127,7 @@ namespace Content.Server.StationEvents.Events
                     // Get a random angular velocity.
                     physics.Mass * ((MaxAngularVelocity - MinAngularVelocity) * _robustRandom.NextFloat() +
                                     MinAngularVelocity));
-                // TODO: God this disgusts me but projectile needs a refactor.
-                IoCManager.Resolve<IEntityManager>().GetComponent<ProjectileComponent>(meteor).TimeLeft = 120f;
+                aggregateSystem.DeAggregate(meteor);
             }
         }
     }

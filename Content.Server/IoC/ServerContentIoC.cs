@@ -11,6 +11,7 @@ using Content.Server.Database;
 using Content.Server.EUI;
 using Content.Server.Info;
 using Content.Server.Maps;
+using Content.Server.Meteors;
 using Content.Server.Module;
 using Content.Server.MoMMI;
 using Content.Server.NodeContainer.NodeGroups;
@@ -52,6 +53,7 @@ namespace Content.Server.IoC
             IoCManager.Register<RoleBanManager, RoleBanManager>();
             IoCManager.Register<NetworkResourceManager>();
             IoCManager.Register<IAdminNotesManager, AdminNotesManager>();
+            IoCManager.Register<PoissonDiskSampler>();
         }
     }
 }
