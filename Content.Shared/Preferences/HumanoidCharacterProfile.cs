@@ -115,7 +115,7 @@ namespace Content.Shared.Preferences
             var random = IoCManager.Resolve<IRobustRandom>();
 
             var species = random.Pick(IoCManager.Resolve<IPrototypeManager>()
-                .EnumeratePrototypes<SpeciesPrototype>().Where(x => x.RoundStart).ToArray()).ID;
+                .EnumeratePrototypes<SpeciesPrototype>().Where(x => x.RoundStart.CurrentValue).ToArray()).ID;
             var sex = random.Prob(0.5f) ? Sex.Male : Sex.Female;
             var gender = sex == Sex.Male ? Gender.Male : Gender.Female;
 

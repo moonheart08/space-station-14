@@ -1,4 +1,5 @@
 ﻿using Content.Shared.CharacterAppearance;
+using Content.Shared.Conditionals;
 using Robust.Shared.IoC;
 
 namespace Content.Shared.IoC
@@ -8,6 +9,7 @@ namespace Content.Shared.IoC
         public static void Register()
         {
             IoCManager.Register<SpriteAccessoryManager, SpriteAccessoryManager>();
+            IoCManager.Register<ConditionalUpdateManager>();
         }
     }
 }

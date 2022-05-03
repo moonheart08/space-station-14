@@ -266,7 +266,7 @@ namespace Content.Server.Preferences.Managers
                         var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
                         var selectedSpecies = SpeciesManager.DefaultSpecies;
 
-                        if (prototypeManager.TryIndex<SpeciesPrototype>(hp.Species, out var species) && species.RoundStart)
+                        if (prototypeManager.TryIndex<SpeciesPrototype>(hp.Species, out var species) && species.RoundStart.CurrentValue)
                         {
                             selectedSpecies = hp.Species;
                         }

@@ -1,3 +1,4 @@
+using Content.Shared.Conditionals;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager.Attributes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
@@ -24,7 +25,7 @@ public sealed class SpeciesPrototype : IPrototype
     /// Whether the species is available "at round start" (In the character editor)
     /// </summary>
     [DataField("roundStart", required: true)]
-    public bool RoundStart { get; } = false;
+    public Conditional RoundStart { get; } = new(false);
 
     /// <summary>
     /// Prototype used by the species as a body.

@@ -187,6 +187,9 @@ namespace Content.Shared.CCVar
         public static readonly CVarDef<int> SoftMaxPlayers =
             CVarDef.Create("game.soft_max_players", 30, CVar.SERVERONLY | CVar.ARCHIVE);
 
+        public static readonly CVarDef<bool> NonHumansEnabled =
+            CVarDef.Create("game.nonhumans_enabled", true, CVar.REPLICATED | CVar.SERVER);
+
 #if EXCEPTION_TOLERANCE
         /// <summary>
         ///     Amount of times round start must fail before the server is shut down.
