@@ -91,5 +91,10 @@ namespace Content.Shared.Arcade
             return new(-vector.Y, vector.X);
         }
 
+        public static Angle GetRelativeFacingAngle(this Vector2 vector2, Vector2 other)
+        {
+            return new Angle(Math.Acos(Vector2.Dot(vector2, other) / Vector2.Dot(Vector2.Abs(vector2), Vector2.Abs(other))));
+        }
+
     }
 }

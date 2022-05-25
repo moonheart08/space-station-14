@@ -1,0 +1,45 @@
+﻿- type: entity
+  id: BaseFleshBall
+  abstract: true
+  components:
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+    - shape:
+        !type:PhysShapeCircle
+        radius: 0.5
+      mass: 250
+      mask:
+        - MobMask
+      layer:
+        - MobLayer
+  - type: FleshBall
+    state: FootUp
+  - type: Joint
+  - type: Sprite
+  - type: Icon
+
+- type: entity
+  id: FleshyMassController
+  parent: BaseFleshBall
+  name: fleshy mass controller (YOU SHOULD NOT SEE THIS!)
+  components:
+  - type: FleshBall
+    state: Controller
+  - type: FleshyMassController
+    fleshBallPrototype: StandardFleshBall
+  - type: Sprite
+    texture: /Textures/Markers/cross.rsi/blue.png
+    scale: 0.5, 0.5
+
+- type: entity
+  id: StandardFleshBall
+  parent: BaseFleshBall
+  name: fleshy mass.
+  description: Oh god.
+  components:
+  - type: Clickable
+  - type: Sprite
+    texture: /Textures/Markers/cross.rsi/red.png
+    scale: 0.5, 0.5
