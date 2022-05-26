@@ -62,8 +62,11 @@ namespace Content.Shared.Verbs
         public static readonly VerbCategory Smite =
             new("verb-categories-smite", "/Textures/Interface/VerbIcons/smite.svg.192dpi.png", iconsOnly: true) { Columns = 5 };
 
+        public static readonly VerbCategory Tricks =
+            new("verb-categories-tricks", null, iconsOnly: true) { Columns = 5 };
+
         public static readonly VerbCategory SetTransferAmount =
-            new("verb-categories-transfer", "/Textures/Interface/VerbIcons/spill.svg.192dpi.png");
+            new("verb-categories-transfer", "/Textures/Interface/VerbIcons/spill.svg.192dpi.png", iconsOnly: true) { Columns = 5 };
 
         public static readonly VerbCategory Split =
             new("verb-categories-split", null);
