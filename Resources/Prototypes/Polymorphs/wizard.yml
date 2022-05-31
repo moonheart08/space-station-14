@@ -1,0 +1,13 @@
+﻿- type: polymorph
+  id: WizardGorilla
+  entity: MobGorilla
+  duration: 45
+  forced: false
+  revertOnCrit: true
+  revertOnDeath: true
+
+- type: polymorph
+  id: WizardLocker
+  entity: ClosetMaintenance
+  duration: 60
+  forced: false

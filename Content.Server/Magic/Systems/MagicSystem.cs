@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using Content.Server.Coordinates.Helpers;
-using Content.Server.Decals;
 using Content.Server.DoAfter;
 using Content.Server.Doors.Components;
 using Content.Server.Magic.Events;
@@ -19,7 +18,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
-namespace Content.Server.Magic;
+namespace Content.Server.Magic.Systems;
 
 /// <summary>
 /// Handles learning and using spells (actions)

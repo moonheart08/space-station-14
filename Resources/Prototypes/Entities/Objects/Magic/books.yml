@@ -63,3 +63,23 @@
     - type: Spellbook
       instantSpells:
         Knock: -1
+
+- type: entity
+  id: GorillamorphSpellbook
+  name: gorillamorph spellbook
+  description: Oh wow, it's just like the hit bookseries Animorphs.
+  parent: BaseSpellbook
+  components:
+    - type: Spellbook
+      instantSpells:
+        BecomeGorilla: -1
+
+- type: entity
+  id: PropClosetSpellbook
+  name: propcloset spellbook
+  description: This book makes you feel like it's 2012 again.
+  parent: BaseSpellbook
+  components:
+    - type: Spellbook
+      instantSpells:
+        BecomeLocker: -1

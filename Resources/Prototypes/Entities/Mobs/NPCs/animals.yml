@@ -522,6 +522,15 @@
     spawned:
     - id: FoodMeat
       amount: 4
+  - type: MeleeWeapon
+    range: 1.5
+    arcwidth: 0
+    arc: fist
+    hitSound:
+      path: /Audio/Effects/bite.ogg
+    damage:
+      types:
+        Brute: 17
   - type: Bloodstream
     bloodMaxVolume: 300
   - type: Puller

@@ -1,0 +1,41 @@
+﻿- type: instantAction
+  id: BecomeGorilla
+  name: action-name-spell-become-gorilla
+  description: action-description-become-gorilla
+  useDelay: 120
+  speech: action-speech-spell-become-gorilla
+  itemIconStyle: BigAction
+  icon:
+    sprite: Objects/Magic/magicactions.rsi
+    state: spell_default
+  serverEvent:
+    !type:PolymorphSelfSpellEvent
+    polymorphTarget: WizardGorilla
+
+- type: instantAction
+  id: BecomeGorilla
+  name: action-name-spell-become-gorilla
+  description: action-description-become-gorilla
+  useDelay: 120
+  speech: action-speech-spell-become-gorilla
+  itemIconStyle: BigAction
+  icon:
+    sprite: Objects/Magic/magicactions.rsi
+    state: spell_default
+  serverEvent:
+    !type:PolymorphSelfSpellEvent
+    polymorphTarget: WizardGorilla
+
+- type: instantAction
+  id: BecomeLocker
+  name: action-name-spell-become-locker
+  description: action-description-become-locker
+  useDelay: 120
+  speech: action-speech-spell-become-locker
+  itemIconStyle: BigAction
+  icon:
+    sprite: Objects/Magic/magicactions.rsi
+    state: spell_default
+  serverEvent:
+    !type:PolymorphSelfSpellEvent
+    polymorphTarget: WizardLocker
