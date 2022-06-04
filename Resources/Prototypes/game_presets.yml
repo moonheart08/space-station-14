@@ -81,6 +81,18 @@
     - Nukeops
 
 - type: gamePreset
+  id: NukieTraitorCombo
+  alias:
+    - nukietraitorcombo
+    - doubleup
+  name: nukie-traitor-combo-title
+  description: nukie-traitor-combo-description
+  showInVote: false
+  rules:
+    - Nukeops
+    - Traitor
+
+- type: gamePreset
   id: Pirates
   alias:
     - pirates
@@ -89,3 +101,14 @@
   showInVote: false
   rules:
     - Pirates
+
+- type: gamePreset
+  id: TraitorPiratesCombo
+  alias:
+    - traitorpiratescombo
+  name: traitor-pirates-combo-title
+  description: traitor-pirates-combo-description
+  showInVote: false
+  rules:
+    - Pirates
+    - Traitor
