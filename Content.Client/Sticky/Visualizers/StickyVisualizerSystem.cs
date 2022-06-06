@@ -8,10 +8,10 @@ public sealed class StickyVisualizerSystem : VisualizerSystem<StickyVisualizerCo
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<StickyVisualizerComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<StickyVisualizerComponent, ComponentStartup>(OnInit);
     }
 
-    private void OnInit(EntityUid uid, StickyVisualizerComponent component, ComponentInit args)
+    private void OnInit(EntityUid uid, StickyVisualizerComponent component, ComponentStartup args)
     {
         if (!TryComp(uid, out SpriteComponent? sprite))
             return;

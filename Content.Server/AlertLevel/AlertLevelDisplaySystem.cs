@@ -10,7 +10,7 @@ public sealed class AlertLevelDisplaySystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<AlertLevelChangedEvent>(OnAlertChanged);
-        SubscribeLocalEvent<AlertLevelDisplayComponent, ComponentInit>(OnDisplayInit);
+        SubscribeLocalEvent<AlertLevelDisplayComponent, ComponentStartup>(OnDisplayInit);
     }
 
     private void OnAlertChanged(AlertLevelChangedEvent args)
@@ -21,7 +21,7 @@ public sealed class AlertLevelDisplaySystem : EntitySystem
         }
     }
 
-    private void OnDisplayInit(EntityUid uid, AlertLevelDisplayComponent component, ComponentInit args)
+    private void OnDisplayInit(EntityUid uid, AlertLevelDisplayComponent component, ComponentStartup args)
     {
         if (TryComp(uid, out AppearanceComponent? appearance))
         {

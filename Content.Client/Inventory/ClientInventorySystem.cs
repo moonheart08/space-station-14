@@ -62,7 +62,7 @@ namespace Content.Client.Inventory
             SubscribeLocalEvent<ClientInventoryComponent, PlayerAttachedEvent>(OnPlayerAttached);
             SubscribeLocalEvent<ClientInventoryComponent, PlayerDetachedEvent>(OnPlayerDetached);
 
-            SubscribeLocalEvent<ClientInventoryComponent, ComponentInit>(OnInit);
+            SubscribeLocalEvent<ClientInventoryComponent, ComponentStartup>(OnInit);
             SubscribeLocalEvent<ClientInventoryComponent, ComponentShutdown>(OnShutdown);
 
             SubscribeLocalEvent<ClientInventoryComponent, DidEquipEvent>(OnDidEquip);
@@ -163,7 +163,7 @@ namespace Content.Client.Inventory
             base.Shutdown();
         }
 
-        private void OnInit(EntityUid uid, ClientInventoryComponent component, ComponentInit args)
+        private void OnInit(EntityUid uid, ClientInventoryComponent component, ComponentStartup args)
         {
             _clothingSystem.InitClothing(uid, component);
 
@@ -218,7 +218,7 @@ namespace Content.Client.Inventory
 
             // only raise event if either itemUid is not null, or the user is holding something
             if (itemUid != null || TryComp(uid, out SharedHandsComponent? hands) && hands.ActiveHandEntity != null)
-                EntityManager.RaisePredictiveEvent(new UseSlotNetworkMessage(slot)); 
+                EntityManager.RaisePredictiveEvent(new UseSlotNetworkMessage(slot));
         }
 
         private bool TryGetUIElements(EntityUid uid, [NotNullWhen(true)] out DefaultWindow? invWindow,

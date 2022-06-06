@@ -60,7 +60,7 @@ namespace Content.Server.Atmos.Monitor.Systems
 
         public override void Initialize()
         {
-            SubscribeLocalEvent<AtmosMonitorComponent, ComponentInit>(OnAtmosMonitorInit);
+            SubscribeLocalEvent<AtmosMonitorComponent, ComponentStartup>(OnAtmosMonitorInit);
             SubscribeLocalEvent<AtmosMonitorComponent, ComponentStartup>(OnAtmosMonitorStartup);
             SubscribeLocalEvent<AtmosMonitorComponent, ComponentShutdown>(OnAtmosMonitorShutdown);
             SubscribeLocalEvent<AtmosMonitorComponent, AtmosDeviceUpdateEvent>(OnAtmosUpdate);
@@ -70,7 +70,7 @@ namespace Content.Server.Atmos.Monitor.Systems
             SubscribeLocalEvent<AtmosMonitorComponent, DeviceNetworkPacketEvent>(OnPacketRecv);
         }
 
-        private void OnAtmosMonitorInit(EntityUid uid, AtmosMonitorComponent component, ComponentInit args)
+        private void OnAtmosMonitorInit(EntityUid uid, AtmosMonitorComponent component, ComponentStartup args)
         {
             if (component.TemperatureThresholdId != null)
                 component.TemperatureThreshold = _prototypeManager.Index<AtmosAlarmThreshold>(component.TemperatureThresholdId);

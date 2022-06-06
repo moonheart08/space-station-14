@@ -14,16 +14,16 @@ public sealed class AtmosPipeAppearanceSystem : EntitySystem
 {
     [Dependency] private readonly IResourceCache _resCache = default!;
     [Dependency] private readonly SubFloorHideSystem _subfloorSys = default!;
-    
+
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<PipeAppearanceComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<PipeAppearanceComponent, ComponentStartup>(OnInit);
         SubscribeLocalEvent<PipeAppearanceComponent, AppearanceChangeEvent>(OnAppearanceChanged, after: new[] { typeof(SubFloorHideSystem) });
     }
 
-    private void OnInit(EntityUid uid, PipeAppearanceComponent component, ComponentInit args)
+    private void OnInit(EntityUid uid, PipeAppearanceComponent component, ComponentStartup args)
     {
         if (!TryComp(uid, out SpriteComponent? sprite))
             return;
@@ -65,7 +65,7 @@ public sealed class AtmosPipeAppearanceSystem : EntitySystem
 
         // transform connected directions to local-coordinates
         var connectedDirections = worldConnectedDirections.RotatePipeDirection(-Transform(uid).LocalRotation);
-        
+
         foreach (PipeConnectionLayer layerKey in Enum.GetValues(typeof(PipeConnectionLayer)))
         {
             if (!args.Sprite.LayerMapTryGet(layerKey, out var key))

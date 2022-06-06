@@ -43,7 +43,7 @@ public sealed partial class TriggerSystem
 
     private void InitializeProximity()
     {
-        SubscribeLocalEvent<TriggerOnProximityComponent, ComponentInit>(OnProximityInit);
+        SubscribeLocalEvent<TriggerOnProximityComponent, ComponentStartup>(OnProximityInit);
         SubscribeLocalEvent<TriggerOnProximityComponent, AppearanceChangeEvent>(OnProxAppChange);
         SubscribeLocalEvent<TriggerOnProximityComponent, AnimationCompletedEvent>(OnProxAnimation);
     }
@@ -57,9 +57,9 @@ public sealed partial class TriggerSystem
         OnChangeData(uid, component, appearance);
     }
 
-    private void OnProximityInit(EntityUid uid, TriggerOnProximityComponent component, ComponentInit args)
+    private void OnProximityInit(EntityUid uid, TriggerOnProximityComponent component, ComponentStartup args)
     {
-        EntityManager.EnsureComponent<AnimationPlayerComponent>(uid);
+        EnsureComp<AnimationPlayerComponent>(uid);
     }
 
     private void OnProxAppChange(EntityUid uid, TriggerOnProximityComponent component, ref AppearanceChangeEvent args)

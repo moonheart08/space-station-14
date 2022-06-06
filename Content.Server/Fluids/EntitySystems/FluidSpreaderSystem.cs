@@ -26,7 +26,7 @@ public sealed class FluidSpreaderSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<FluidSpreaderComponent, ComponentAdd>((uid, component, _) =>
+        SubscribeLocalEvent<FluidSpreaderComponent, ComponentStartup>((uid, component, _) =>
             FluidSpreaderAdd(uid, component));
     }
 

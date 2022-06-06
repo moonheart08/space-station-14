@@ -47,8 +47,8 @@ namespace Content.Client.Ghost
         {
             base.Initialize();
 
-            SubscribeLocalEvent<GhostComponent, ComponentInit>(OnGhostInit);
-            SubscribeLocalEvent<GhostComponent, ComponentRemove>(OnGhostRemove);
+            SubscribeLocalEvent<GhostComponent, ComponentStartup>(OnGhostInit);
+            SubscribeLocalEvent<GhostComponent, ComponentShutdown>(OnGhostRemove);
 
             SubscribeLocalEvent<GhostComponent, PlayerAttachedEvent>(OnGhostPlayerAttach);
             SubscribeLocalEvent<GhostComponent, PlayerDetachedEvent>(OnGhostPlayerDetach);
@@ -57,7 +57,7 @@ namespace Content.Client.Ghost
             SubscribeNetworkEvent<GhostUpdateGhostRoleCountEvent>(OnUpdateGhostRoleCount);
         }
 
-        private void OnGhostInit(EntityUid uid, GhostComponent component, ComponentInit args)
+        private void OnGhostInit(EntityUid uid, GhostComponent component, ComponentStartup args)
         {
             if (EntityManager.TryGetComponent(component.Owner, out SpriteComponent? sprite))
             {
@@ -65,7 +65,7 @@ namespace Content.Client.Ghost
             }
         }
 
-        private void OnGhostRemove(EntityUid uid, GhostComponent component, ComponentRemove args)
+        private void OnGhostRemove(EntityUid uid, GhostComponent component, ComponentShutdown args)
         {
             component.Gui?.Dispose();
             component.Gui = null;

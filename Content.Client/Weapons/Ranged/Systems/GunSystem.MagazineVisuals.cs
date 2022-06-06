@@ -9,11 +9,11 @@ public sealed partial class GunSystem
 {
     private void InitializeMagazineVisuals()
     {
-        SubscribeLocalEvent<MagazineVisualsComponent, ComponentInit>(OnMagazineVisualsInit);
+        SubscribeLocalEvent<MagazineVisualsComponent, ComponentStartup>(OnMagazineVisualsInit);
         SubscribeLocalEvent<MagazineVisualsComponent, AppearanceChangeEvent>(OnMagazineVisualsChange);
     }
 
-    private void OnMagazineVisualsInit(EntityUid uid, MagazineVisualsComponent component, ComponentInit args)
+    private void OnMagazineVisualsInit(EntityUid uid, MagazineVisualsComponent component, ComponentStartup args)
     {
         if (!TryComp<SpriteComponent>(uid, out var sprite)) return;
 

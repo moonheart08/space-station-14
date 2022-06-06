@@ -20,7 +20,7 @@ namespace Content.Server.Atmos.Piping.EntitySystems
         {
             base.Initialize();
 
-            SubscribeLocalEvent<AtmosDeviceComponent, ComponentInit>(OnDeviceInitialize);
+            SubscribeLocalEvent<AtmosDeviceComponent, ComponentStartup>(OnDeviceInitialize);
             SubscribeLocalEvent<AtmosDeviceComponent, ComponentShutdown>(OnDeviceShutdown);
             // Re-anchoring should be handled by the parent change.
             SubscribeLocalEvent<AtmosDeviceComponent, EntParentChangedMessage>(OnDeviceParentChanged);
@@ -85,7 +85,7 @@ namespace Content.Server.Atmos.Piping.EntitySystems
             JoinAtmosphere(component);
         }
 
-        private void OnDeviceInitialize(EntityUid uid, AtmosDeviceComponent component, ComponentInit args)
+        private void OnDeviceInitialize(EntityUid uid, AtmosDeviceComponent component, ComponentStartup args)
         {
             JoinAtmosphere(component);
         }

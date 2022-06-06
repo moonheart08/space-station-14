@@ -33,7 +33,7 @@ namespace Content.Server.AI.EntitySystems
         {
             base.Initialize();
             SubscribeLocalEvent<AiControllerComponent, MobStateChangedEvent>(OnMobStateChange);
-            SubscribeLocalEvent<AiControllerComponent, ComponentInit>(OnNPCInit);
+            SubscribeLocalEvent<AiControllerComponent, ComponentStartup>(OnNPCInit);
             SubscribeLocalEvent<AiControllerComponent, ComponentShutdown>(OnNPCShutdown);
             _configurationManager.OnValueChanged(CCVars.NPCEnabled, SetEnabled, true);
 
@@ -51,7 +51,7 @@ namespace Content.Server.AI.EntitySystems
             _configurationManager.UnsubValueChanged(CCVars.NPCEnabled, SetEnabled);
         }
 
-        private void OnNPCInit(EntityUid uid, AiControllerComponent component, ComponentInit args)
+        private void OnNPCInit(EntityUid uid, AiControllerComponent component, ComponentStartup args)
         {
             if (!component.Awake) return;
 

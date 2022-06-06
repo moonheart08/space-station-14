@@ -12,10 +12,10 @@ public sealed class TypingIndicatorVisualizerSystem : VisualizerSystem<TypingInd
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<TypingIndicatorComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<TypingIndicatorComponent, ComponentStartup>(OnInit);
     }
 
-    private void OnInit(EntityUid uid, TypingIndicatorComponent component, ComponentInit args)
+    private void OnInit(EntityUid uid, TypingIndicatorComponent component, ComponentStartup args)
     {
         if (!TryComp(uid, out SpriteComponent? sprite))
             return;

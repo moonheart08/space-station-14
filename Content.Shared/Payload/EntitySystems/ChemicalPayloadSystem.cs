@@ -12,8 +12,8 @@ public sealed class ChemicalPayloadSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<ChemicalPayloadComponent, ComponentInit>(OnComponentInit);
-        SubscribeLocalEvent<ChemicalPayloadComponent, ComponentRemove>(OnComponentRemove);
+        SubscribeLocalEvent<ChemicalPayloadComponent, ComponentStartup>(OnComponentInit);
+        SubscribeLocalEvent<ChemicalPayloadComponent, ComponentShutdown>(OnComponentRemove);
         SubscribeLocalEvent<ChemicalPayloadComponent, EntInsertedIntoContainerMessage>(OnContainerModified);
         SubscribeLocalEvent<ChemicalPayloadComponent, EntRemovedFromContainerMessage>(OnContainerModified);
     }
@@ -39,13 +39,13 @@ public sealed class ChemicalPayloadSystem : EntitySystem
         appearance.SetData(ChemicalPayloadVisuals.Slots, filled);
     }
 
-    private void OnComponentInit(EntityUid uid, ChemicalPayloadComponent payload, ComponentInit args)
+    private void OnComponentInit(EntityUid uid, ChemicalPayloadComponent payload, ComponentStartup args)
     {
         _itemSlotsSystem.AddItemSlot(uid, "BeakerSlotA", payload.BeakerSlotA);
         _itemSlotsSystem.AddItemSlot(uid, "BeakerSlotB", payload.BeakerSlotB);
     }
 
-    private void OnComponentRemove(EntityUid uid, ChemicalPayloadComponent payload, ComponentRemove args)
+    private void OnComponentRemove(EntityUid uid, ChemicalPayloadComponent payload, ComponentShutdown args)
     {
         _itemSlotsSystem.RemoveItemSlot(uid, payload.BeakerSlotA);
         _itemSlotsSystem.RemoveItemSlot(uid, payload.BeakerSlotB);

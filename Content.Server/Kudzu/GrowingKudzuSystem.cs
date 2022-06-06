@@ -11,10 +11,10 @@ public sealed class GrowingKudzuSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<GrowingKudzuComponent, ComponentAdd>(SetupKudzu);
+        SubscribeLocalEvent<GrowingKudzuComponent, ComponentStartup>(SetupKudzu);
     }
 
-    private void SetupKudzu(EntityUid uid, GrowingKudzuComponent component, ComponentAdd args)
+    private void SetupKudzu(EntityUid uid, GrowingKudzuComponent component, ComponentStartup args)
     {
         if (!EntityManager.TryGetComponent<AppearanceComponent>(uid, out var appearance))
         {

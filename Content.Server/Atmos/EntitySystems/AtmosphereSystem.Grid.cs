@@ -21,11 +21,11 @@ namespace Content.Server.Atmos.EntitySystems
 
         private void InitializeGrid()
         {
-            SubscribeLocalEvent<GridAtmosphereComponent, ComponentInit>(OnGridAtmosphereInit);
+            SubscribeLocalEvent<GridAtmosphereComponent, ComponentStartup>(OnGridAtmosphereInit);
             SubscribeLocalEvent<GridAtmosphereComponent, GridSplitEvent>(OnGridSplit);
         }
 
-        private void OnGridAtmosphereInit(EntityUid uid, GridAtmosphereComponent gridAtmosphere, ComponentInit args)
+        private void OnGridAtmosphereInit(EntityUid uid, GridAtmosphereComponent gridAtmosphere, ComponentStartup args)
         {
             base.Initialize();
 

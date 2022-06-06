@@ -21,7 +21,7 @@ namespace Content.Server.Abilities.Mime
         public override void Initialize()
         {
             base.Initialize();
-            SubscribeLocalEvent<MimePowersComponent, ComponentInit>(OnComponentInit);
+            SubscribeLocalEvent<MimePowersComponent, ComponentStartup>(OnComponentInit);
             SubscribeLocalEvent<MimePowersComponent, SpeakAttemptEvent>(OnSpeakAttempt);
             SubscribeLocalEvent<MimePowersComponent, InvisibleWallActionEvent>(OnInvisibleWall);
         }
@@ -43,7 +43,7 @@ namespace Content.Server.Abilities.Mime
             }
         }
 
-        private void OnComponentInit(EntityUid uid, MimePowersComponent component, ComponentInit args)
+        private void OnComponentInit(EntityUid uid, MimePowersComponent component, ComponentStartup args)
         {
             _actionsSystem.AddAction(uid, component.InvisibleWallAction, uid);
             _alertsSystem.ShowAlert(uid, AlertType.VowOfSilence);

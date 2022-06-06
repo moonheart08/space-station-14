@@ -51,7 +51,7 @@ public sealed class StationSystem : EntitySystem
         SubscribeLocalEvent<GameRunLevelChangedEvent>(OnRoundEnd);
         SubscribeLocalEvent<PreGameMapLoad>(OnPreGameMapLoad);
         SubscribeLocalEvent<PostGameMapLoad>(OnPostGameMapLoad);
-        SubscribeLocalEvent<StationDataComponent, ComponentAdd>(OnStationStartup);
+        SubscribeLocalEvent<StationDataComponent, ComponentStartup>(OnStationStartup);
         SubscribeLocalEvent<StationDataComponent, ComponentShutdown>(OnStationDeleted);
 
         _configurationManager.OnValueChanged(CCVars.StationOffset, x => _randomStationOffset = x, true);
@@ -61,7 +61,7 @@ public sealed class StationSystem : EntitySystem
 
     #region Event handlers
 
-    private void OnStationStartup(EntityUid uid, StationDataComponent component, ComponentAdd args)
+    private void OnStationStartup(EntityUid uid, StationDataComponent component, ComponentStartup args)
     {
         _stations.Add(uid);
     }

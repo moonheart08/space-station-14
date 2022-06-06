@@ -29,8 +29,8 @@ namespace Content.Client.CharacterInterface
                 InputCmdHandler.FromDelegate(_ => HandleOpenCharacterMenu()))
                 .Register<CharacterInterfaceSystem>();
 
-            SubscribeLocalEvent<CharacterInterfaceComponent, ComponentInit>(OnComponentInit);
-            SubscribeLocalEvent<CharacterInterfaceComponent, ComponentRemove>(OnComponentRemove);
+            SubscribeLocalEvent<CharacterInterfaceComponent, ComponentStartup>(OnComponentInit);
+            SubscribeLocalEvent<CharacterInterfaceComponent, ComponentShutdown>(OnComponentRemove);
             SubscribeLocalEvent<CharacterInterfaceComponent, PlayerAttachedEvent>(OnPlayerAttached);
             SubscribeLocalEvent<CharacterInterfaceComponent, PlayerDetachedEvent>(OnPlayerDetached);
         }
@@ -41,7 +41,7 @@ namespace Content.Client.CharacterInterface
             base.Shutdown();
         }
 
-        private void OnComponentInit(EntityUid uid, CharacterInterfaceComponent comp, ComponentInit args)
+        private void OnComponentInit(EntityUid uid, CharacterInterfaceComponent comp, ComponentStartup args)
         {
             //Use all the character ui interfaced components to create the character window
             comp.UIComponents = EntityManager.GetComponents<ICharacterUI>(uid).ToList();
@@ -56,7 +56,7 @@ namespace Content.Client.CharacterInterface
             comp.Window.OnClose += () => _gameHud.CharacterButtonDown = false;
         }
 
-        private void OnComponentRemove(EntityUid uid, CharacterInterfaceComponent comp, ComponentRemove args)
+        private void OnComponentRemove(EntityUid uid, CharacterInterfaceComponent comp, ComponentShutdown args)
         {
             if (comp.UIComponents != null)
             {

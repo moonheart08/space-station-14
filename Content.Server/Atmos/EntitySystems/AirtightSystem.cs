@@ -15,14 +15,14 @@ namespace Content.Server.Atmos.EntitySystems
 
         public override void Initialize()
         {
-            SubscribeLocalEvent<AirtightComponent, ComponentInit>(OnAirtightInit);
+            SubscribeLocalEvent<AirtightComponent, ComponentStartup>(OnAirtightInit);
             SubscribeLocalEvent<AirtightComponent, ComponentShutdown>(OnAirtightShutdown);
             SubscribeLocalEvent<AirtightComponent, AnchorStateChangedEvent>(OnAirtightPositionChanged);
             SubscribeLocalEvent<AirtightComponent, ReAnchorEvent>(OnAirtightReAnchor);
             SubscribeLocalEvent<AirtightComponent, RotateEvent>(OnAirtightRotated);
         }
 
-        private void OnAirtightInit(EntityUid uid, AirtightComponent airtight, ComponentInit args)
+        private void OnAirtightInit(EntityUid uid, AirtightComponent airtight, ComponentStartup args)
         {
             var xform = EntityManager.GetComponent<TransformComponent>(uid);
 

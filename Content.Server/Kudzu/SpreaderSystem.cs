@@ -24,7 +24,7 @@ public sealed class SpreaderSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<SpreaderComponent, ComponentAdd>(SpreaderAddHandler);
+        SubscribeLocalEvent<SpreaderComponent, ComponentStartup>(SpreaderAddHandler);
         SubscribeLocalEvent<AirtightChanged>(OnAirtightChanged);
     }
 
@@ -33,7 +33,7 @@ public sealed class SpreaderSystem : EntitySystem
         UpdateNearbySpreaders((e.Airtight).Owner, e.Airtight);
     }
 
-    private void SpreaderAddHandler(EntityUid uid, SpreaderComponent component, ComponentAdd args)
+    private void SpreaderAddHandler(EntityUid uid, SpreaderComponent component, ComponentStartup args)
     {
         if (component.Enabled)
             _edgeGrowths.Add(uid); // ez

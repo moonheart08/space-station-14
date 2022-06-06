@@ -24,11 +24,11 @@ namespace Content.Server.Access.Systems
         public override void Initialize()
         {
             base.Initialize();
-            SubscribeLocalEvent<IdCardComponent, ComponentInit>(OnInit);
+            SubscribeLocalEvent<IdCardComponent, ComponentStartup>(OnInit);
             SubscribeLocalEvent<IdCardComponent, BeingMicrowavedEvent>(OnMicrowaved);
         }
 
-        private void OnInit(EntityUid uid, IdCardComponent id, ComponentInit args)
+        private void OnInit(EntityUid uid, IdCardComponent id, ComponentStartup args)
         {
             id.OriginalOwnerName ??= EntityManager.GetComponent<MetaDataComponent>(id.Owner).EntityName;
             UpdateEntityName(uid, id);

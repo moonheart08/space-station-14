@@ -16,7 +16,7 @@ public abstract class SharedFoldableSystem : EntitySystem
         SubscribeLocalEvent<FoldableComponent, ComponentGetState>(OnGetState);
         SubscribeLocalEvent<FoldableComponent, ComponentHandleState>(OnHandleState);
 
-        SubscribeLocalEvent<FoldableComponent, ComponentInit>(OnFoldableInit);
+        SubscribeLocalEvent<FoldableComponent, ComponentStartup>(OnFoldableInit);
         SubscribeLocalEvent<FoldableComponent, ContainerGettingInsertedAttemptEvent>(OnInsertEvent);
     }
 
@@ -34,7 +34,7 @@ public abstract class SharedFoldableSystem : EntitySystem
             SetFolded(component, state.IsFolded);
     }
 
-    private void OnFoldableInit(EntityUid uid, FoldableComponent component, ComponentInit args)
+    private void OnFoldableInit(EntityUid uid, FoldableComponent component, ComponentStartup args)
     {
         SetFolded(component, component.IsFolded);
     }

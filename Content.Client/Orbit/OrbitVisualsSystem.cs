@@ -18,19 +18,19 @@ public sealed class OrbitVisualsSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<OrbitVisualsComponent, ComponentInit>(OnComponentInit);
-        SubscribeLocalEvent<OrbitVisualsComponent, ComponentRemove>(OnComponentRemove);
+        SubscribeLocalEvent<OrbitVisualsComponent, ComponentStartup>(OnComponentInit);
+        SubscribeLocalEvent<OrbitVisualsComponent, ComponentShutdown>(OnComponentRemove);
         SubscribeLocalEvent<OrbitVisualsComponent, AnimationCompletedEvent>(OnAnimationCompleted);
     }
 
-    private void OnComponentInit(EntityUid uid, OrbitVisualsComponent component, ComponentInit args)
+    private void OnComponentInit(EntityUid uid, OrbitVisualsComponent component, ComponentStartup args)
     {
         component.OrbitDistance =
             _robustRandom.NextFloat(0.75f * component.OrbitDistance, 1.25f * component.OrbitDistance);
 
         component.OrbitLength = _robustRandom.NextFloat(0.5f * component.OrbitLength, 1.5f * component.OrbitLength);
 
-        var animationPlayer = EntityManager.EnsureComponent<AnimationPlayerComponent>(uid);
+        var animationPlayer = EnsureComp<AnimationPlayerComponent>(uid);
         if (animationPlayer.HasRunningAnimation(_orbitAnimationKey))
             return;
 
@@ -42,12 +42,12 @@ public sealed class OrbitVisualsSystem : EntitySystem
         animationPlayer.Play(GetOrbitAnimation(component), _orbitAnimationKey);
     }
 
-    private void OnComponentRemove(EntityUid uid, OrbitVisualsComponent component, ComponentRemove args)
+    private void OnComponentRemove(EntityUid uid, OrbitVisualsComponent component, ComponentShutdown args)
     {
         if (!TryComp<ISpriteComponent>(uid, out var sprite))
             return;
 
-        var animationPlayer = EntityManager.EnsureComponent<AnimationPlayerComponent>(uid);
+        var animationPlayer = EnsureComp<AnimationPlayerComponent>(uid);
         if (animationPlayer.HasRunningAnimation(_orbitAnimationKey))
         {
             animationPlayer.Stop(_orbitAnimationKey);

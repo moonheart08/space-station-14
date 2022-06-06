@@ -21,14 +21,14 @@ namespace Content.Server.Advertise
 
         public override void Initialize()
         {
-            SubscribeLocalEvent<AdvertiseComponent, ComponentInit>(OnComponentInit);
+            SubscribeLocalEvent<AdvertiseComponent, ComponentStartup>(OnComponentInit);
             SubscribeLocalEvent<AdvertiseComponent, PowerChangedEvent>(OnPowerChanged);
 
             SubscribeLocalEvent<ApcPowerReceiverComponent, AdvertiseEnableChangeAttemptEvent>(OnPowerReceiverEnableChangeAttempt);
             SubscribeLocalEvent<VendingMachineComponent, AdvertiseEnableChangeAttemptEvent>(OnVendingEnableChangeAttempt);
         }
 
-        private void OnComponentInit(EntityUid uid, AdvertiseComponent advertise, ComponentInit args)
+        private void OnComponentInit(EntityUid uid, AdvertiseComponent advertise, ComponentStartup args)
         {
             RefreshTimer(uid, true, advertise);
         }

@@ -13,16 +13,16 @@ namespace Content.Shared.Chemistry.EntitySystems
         {
             base.Initialize();
 
-            SubscribeLocalEvent<SharedChemMasterComponent, ComponentInit>(OnComponentInit);
-            SubscribeLocalEvent<SharedChemMasterComponent, ComponentRemove>(OnComponentRemove);
+            SubscribeLocalEvent<SharedChemMasterComponent, ComponentStartup>(OnComponentInit);
+            SubscribeLocalEvent<SharedChemMasterComponent, ComponentShutdown>(OnComponentRemove);
         }
 
-        private void OnComponentInit(EntityUid uid, SharedChemMasterComponent component, ComponentInit args)
+        private void OnComponentInit(EntityUid uid, SharedChemMasterComponent component, ComponentStartup args)
         {
             _itemSlotsSystem.AddItemSlot(uid, SharedChemMasterComponent.BeakerSlotId, component.BeakerSlot);
         }
 
-        private void OnComponentRemove(EntityUid uid, SharedChemMasterComponent component, ComponentRemove args)
+        private void OnComponentRemove(EntityUid uid, SharedChemMasterComponent component, ComponentShutdown args)
         {
             _itemSlotsSystem.RemoveItemSlot(uid, component.BeakerSlot);
         }
