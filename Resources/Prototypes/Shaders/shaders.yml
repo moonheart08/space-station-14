@@ -24,6 +24,12 @@
   path: "/Textures/Shaders/singularity.swsl"
 
 - type: shader
+  id: VacuumDecay
+  kind: source
+  path: "/Textures/Shaders/vacuum_decay.swsl"
+
+
+- type: shader
   id: Radiation
   kind: source
   path: "/Textures/Shaders/radiation.swsl"

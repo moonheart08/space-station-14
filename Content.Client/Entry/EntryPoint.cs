@@ -23,6 +23,7 @@ using Content.Client.Singularity;
 using Content.Client.StationEvents;
 using Content.Client.StationEvents.Managers;
 using Content.Client.Stylesheets;
+using Content.Client.VacuumDecay;
 using Content.Client.Viewport;
 using Content.Client.Voting;
 using Content.Shared.Actions;
@@ -191,6 +192,7 @@ namespace Content.Client.Entry
             overlayMgr.AddOverlay(new CircleMaskOverlay());
             overlayMgr.AddOverlay(new FlashOverlay());
             overlayMgr.AddOverlay(new RadiationPulseOverlay());
+            overlayMgr.AddOverlay(new VacuumDecayOverlay());
 
             IoCManager.Resolve<IChatManager>().Initialize();
             IoCManager.Resolve<IClientPreferencesManager>().Initialize();

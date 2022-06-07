@@ -1,0 +1,29 @@
+﻿uniform sampler2D SCREEN_TEXTURE;
+uniform highp vec2 renderScale;
+uniform lowp int count;
+uniform highp float pixelsPerEntry;
+
+uniform highp vec2[5] position;
+uniform highp float[5] radius;
+
+void fragment() {
+    highp vec2 finalCoords = FRAGCOORD.xy;
+    highp vec2 delta;
+    highp float distance;
+    highp float pixelation;
+
+    for (int i = 0; i < 5 && i < 2; i++) {
+        delta = FRAGCOORD.xy - position[i];
+    	distance = length(delta / renderScale);
+    	if (distance >= radius[i]) {
+    	    pixelation = 1.0;
+    	} else {
+            pixelation = pow(0.5, max(min((radius[i] - distance) / pixelsPerEntry,7.0),0.0));
+        }
+        highp float x = floor(finalCoords.x * pixelation) / pixelation;
+        highp float y = floor(finalCoords.y * pixelation) / pixelation;
+        finalCoords = vec2(x, y);
+    }
+
+    COLOR = zTextureSpec(SCREEN_TEXTURE, finalCoords*SCREEN_PIXEL_SIZE);
+}
