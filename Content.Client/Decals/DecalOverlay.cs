@@ -1,6 +1,8 @@
 using Content.Shared.Decals;
+using Content.Shared.Rotation;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Utility;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -19,7 +21,7 @@ namespace Content.Client.Decals
 
         public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowEntities;
 
-        private readonly Dictionary<string, Texture> _cachedTextures = new(64);
+        private readonly Dictionary<(string, Direction), (Texture, RSI.State.Direction)> _cachedTextures = new(64);
 
         public DecalOverlay(
             DecalSystem decals,
@@ -50,23 +52,27 @@ namespace Content.Client.Decals
                 var gridUid = _mapManager.GetGridEuid(gridId);
                 var xform = xformQuery.GetComponent(gridUid);
 
-                handle.SetTransform(_transform.GetWorldMatrix(xform, xformQuery));
+                var worldMatrix = _transform.GetWorldMatrix(xform, xformQuery);
 
                 foreach (var (_, decals) in zIndexDictionary)
                 {
                     foreach (var (_, decal) in decals)
                     {
-                        if (!_cachedTextures.TryGetValue(decal.Id, out var texture))
+                        var dir = decal.Angle.GetDir();
+                        if (!_cachedTextures.TryGetValue((decal.Id, dir), out var textureDirPair))
                         {
                             var sprite = GetDecalSprite(decal.Id);
-                            texture = _sprites.Frame0(sprite);
-                            _cachedTextures[decal.Id] = texture;
+                            var state = _sprites.RsiStateLike(sprite);
+                            var rsiDir = dir.Convert(state.Directions);
+                            var texture = state.GetFrame(rsiDir, 0);
+                            _cachedTextures[(decal.Id, dir)] = (texture, rsiDir);
+                            textureDirPair = (texture, rsiDir);
                         }
 
-                        if (decal.Angle.Equals(Angle.Zero))
-                            handle.DrawTexture(texture, decal.Coordinates, decal.Color);
-                        else
-                            handle.DrawTexture(texture, decal.Coordinates, decal.Angle, decal.Color);
+                        GetDrawMatrix(textureDirPair.Item2, Matrix3.CreateTransform(decal.Coordinates, decal.Angle), out var drawMatrix);
+                        Matrix3.Multiply(ref worldMatrix, ref drawMatrix, out var finalMatrix);
+                        handle.SetTransform(finalMatrix);
+                        handle.DrawTexture(textureDirPair.Item1, Vector2.Zero, decal.Color);
                     }
                 }
             }
@@ -82,5 +88,28 @@ namespace Content.Client.Decals
                 return new SpriteSpecifier.Texture(new ResourcePath("/Textures/noSprite.png"));
             }
         }
+
+        private void GetDrawMatrix(RSI.State.Direction dir, Matrix3 localMatrix, out Matrix3 drawMatrix)
+        {
+            if (dir == RSI.State.Direction.South)
+                drawMatrix = localMatrix;
+            else
+            {
+                Matrix3.Multiply(ref RSIDirectionMatrices[(int)dir], ref localMatrix, out drawMatrix);
+            }
+        }
+
+        private static readonly Matrix3[] RSIDirectionMatrices = {
+            // Yes, this is stolen straight from SpriteComponent.
+            // array order chosen such that this array can be indexed by casing an RSI direction to an int
+            Matrix3.Identity, // should probably just avoid matrix multiplication altogether if the direction is south.
+            Matrix3.CreateRotation(-Direction.North.ToAngle()),
+            Matrix3.CreateRotation(-Direction.East.ToAngle()),
+            Matrix3.CreateRotation(-Direction.West.ToAngle()),
+            Matrix3.CreateRotation(-Direction.SouthEast.ToAngle()),
+            Matrix3.CreateRotation(-Direction.SouthWest.ToAngle()),
+            Matrix3.CreateRotation(-Direction.NorthEast.ToAngle()),
+            Matrix3.CreateRotation(-Direction.NorthWest.ToAngle())
+        };
     }
 }
