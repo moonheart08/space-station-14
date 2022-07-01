@@ -5,6 +5,7 @@ using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Station.Components;
 using Content.Shared.CCVar;
+using Content.Shared.Datum;
 using JetBrains.Annotations;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
@@ -26,6 +27,7 @@ public sealed class StationSystem : EntitySystem
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ChatSystem _chatSystem = default!;
+    [Dependency] private readonly DatumSystem _datumSystem = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
 
     private ISawmill _sawmill = default!;
@@ -175,8 +177,7 @@ public sealed class StationSystem : EntitySystem
     /// <returns>The initialized station.</returns>
     public EntityUid InitializeNewStation(StationConfig? stationConfig, IEnumerable<EntityUid>? gridIds, string? name = null)
     {
-        //HACK: This needs to go in null-space but that crashes currently.
-        var station = Spawn(null, new MapCoordinates(0, 0, _gameTicker.DefaultMap));
+        var station = _datumSystem.SpawnDatum();
         var data = AddComp<StationDataComponent>(station);
         var metaData = MetaData(station);
         data.StationConfig = stationConfig;
