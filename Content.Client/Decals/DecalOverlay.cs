@@ -19,7 +19,7 @@ namespace Content.Client.Decals
 
         public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowEntities;
 
-        private readonly Dictionary<string, Texture> _cachedTextures = new(64);
+        private readonly Dictionary<string, (Texture texture, DecalKind kind)> _cachedData = new(64);
 
         public DecalOverlay(
             DecalSystem decals,
@@ -55,17 +55,20 @@ namespace Content.Client.Decals
                 {
                     foreach (var (_, decal) in decals)
                     {
-                        if (!_cachedTextures.TryGetValue(decal.Id, out var texture))
+                        if (!_cachedData.TryGetValue(decal.Id, out var data))
                         {
                             var sprite = GetDecalSprite(decal.Id);
-                            texture = _sprites.Frame0(sprite);
-                            _cachedTextures[decal.Id] = texture;
+                            data.texture = _sprites.Frame0(sprite);
+                            data.kind = GetDecalKind(decal.Id);
+                            _cachedData[decal.Id] = data;
                         }
 
+                        handle.UseShader();
+
                         if (decal.Angle.Equals(Angle.Zero))
-                            handle.DrawTexture(texture, decal.Coordinates, decal.Color);
+                            handle.DrawTexture(data.texture, decal.Coordinates, decal.Color);
                         else
-                            handle.DrawTexture(texture, decal.Coordinates, decal.Angle, decal.Color);
+                            handle.DrawTexture(data, decal.Coordinates, decal.Angle, decal.Color);
                     }
                 }
             }
@@ -79,6 +82,17 @@ namespace Content.Client.Decals
             {
                 Logger.Error($"Unknown decal prototype: {id}");
                 return new SpriteSpecifier.Texture(new ResourcePath("/Textures/noSprite.png"));
+            }
+        }
+
+        public DecalKind GetDecalKind(string id)
+        {
+            if (_prototypeManager.TryIndex<DecalPrototype>(id, out var proto))
+                return proto.Kind;
+            else
+            {
+                Logger.Error($"Unknown decal prototype: {id}");
+                return DecalKind.Normal;
             }
         }
     }

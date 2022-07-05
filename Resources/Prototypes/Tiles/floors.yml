@@ -85,6 +85,8 @@
   id: floor_techmaint
   name: techmaint floor
   texture: "tech_maint"
+  variants: 8
+  placementVariants: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
   base_turfs:
   - plating
   is_subfloor: false
@@ -145,6 +147,8 @@
   id: floor_steel_dirty
   name: dirty steel floor
   texture: "steel_dirty"
+  variants: 8
+  placementVariants: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
   base_turfs:
   - plating
   is_subfloor: false
@@ -289,6 +293,8 @@
   id: floor_mime
   name: mime floor
   texture: "mime"
+  variants: 8
+  placementVariants: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
   base_turfs:
   - plating
   is_subfloor: false

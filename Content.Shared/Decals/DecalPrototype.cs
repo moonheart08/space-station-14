@@ -8,6 +8,13 @@ namespace Content.Shared.Decals
     {
         [IdDataFieldAttribute] public string ID { get; } = null!;
         [DataField("sprite")] public SpriteSpecifier Sprite { get; } = SpriteSpecifier.Invalid;
+        [DataField("kind")] public DecalKind Kind { get; } = DecalKind.Normal;
         [DataField("tags")] public List<string> Tags = new();
+    }
+
+    public enum DecalKind
+    {
+        Normal,
+        Multiply,
     }
 }
