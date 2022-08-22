@@ -115,7 +115,7 @@ namespace Content.Server.Tools
             CancellationToken? cancelToken = null)
         {
             // No logging here, after all that'd mean the caller would need to check if the component is there or not.
-            if (!Resolve(tool, ref toolComponent, false))
+            if (!Resolve(tool, ref toolComponent, false) || !HasComp<DoAfterComponent>(tool))
                 return false;
 
             if (!ToolStartUse(tool, user, fuel, toolQualitiesNeeded, toolComponent))

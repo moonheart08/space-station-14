@@ -1,0 +1,22 @@
+﻿- type: entity
+  id: ConveyorLoader
+  parent: ConveyorBelt
+  name: Loader
+  description: It loads things into other things. Use a multitool to change it's target if there's multiple destinations in a tile.
+  components:
+  - type: Fixtures
+    fixtures:
+      - id: loader
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.35,0,0.35,0.70"
+        hard: false
+        layer:
+        - LowImpassable
+        - MidImpassable
+        - Impassable
+  - type: Sprite
+    color: "#AAFFAAFF"
+  - type: OuterRimTargeted
+  - type: OuterRimLoader
+    loadingFixture: loader
