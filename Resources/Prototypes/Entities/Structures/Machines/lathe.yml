@@ -508,3 +508,7 @@
       whitelist:
         tags:
           - Ore
+    - type: OuterRimLoaderInteractionSim
+      whitelist:
+        tags:
+          - Ore

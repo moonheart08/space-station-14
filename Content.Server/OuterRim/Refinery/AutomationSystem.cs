@@ -2,6 +2,7 @@
 using Content.Server.Tools;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
+using Content.Shared.Placeable;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Player;
@@ -24,6 +25,47 @@ public sealed class AutomationSystem : EntitySystem
     {
         SubscribeLocalEvent<OuterRimLoaderComponent, StartCollideEvent>(OnLoaderCollide);
         SubscribeLocalEvent<OuterRimTargetedComponent, InteractUsingEvent>(OnTargetedInteractUsing);
+        SubscribeLocalEvent<OuterRimLoaderInteractionSimComponent, LoaderTryLoadEvent>(OnInteractionSimTryLoad);
+        SubscribeLocalEvent<PlaceableSurfaceComponent, LoaderTryLoadEvent>(OnLoaderToPlacableSurface);
+    }
+
+    private void OnLoaderToPlacableSurface(EntityUid uid, PlaceableSurfaceComponent component, ref LoaderTryLoadEvent args)
+    {
+        Logger.Debug($"Huh. {ToPrettyString(uid)}, {ToPrettyString(args.LoadedEntity)}, {ToPrettyString(args.Loader)}");
+        Transform(args.LoadedEntity).Coordinates = Transform(uid).Coordinates.Offset(component.PositionOffset);
+
+        args.Handled = true;
+    }
+
+    private void OnInteractionSimTryLoad(EntityUid uid, OuterRimLoaderInteractionSimComponent component, ref LoaderTryLoadEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!component.Whitelist.IsValid(args.LoadedEntity, EntityManager))
+            return; // Can't load you.
+
+        if (component.DoInteract)
+        {
+
+            var interactUsing = new InteractUsingEvent(args.Loader, args.LoadedEntity, uid, Transform(uid).Coordinates);
+
+            RaiseLocalEvent(uid, interactUsing);
+
+            if (interactUsing.Handled)
+                args.Handled = true;
+        }
+
+        if (component.DoAfterInteract && !args.Handled)
+        {
+
+            var interactUsing = new AfterInteractEvent(args.Loader, args.LoadedEntity, uid, Transform(uid).Coordinates, true);
+
+            RaiseLocalEvent(uid, interactUsing);
+
+            if (interactUsing.Handled)
+                args.Handled = true;
+        }
     }
 
     private void OnTargetedInteractUsing(EntityUid uid, OuterRimTargetedComponent component, InteractUsingEvent args)
@@ -65,7 +107,7 @@ public sealed class AutomationSystem : EntitySystem
 
         targetIdx++;
 
-        if (targetPile.Count >= targetIdx)
+        if (targetIdx >= targetPile.Count)
             targetIdx = 0;
 
         targetEntity = targetPile[targetIdx];
@@ -75,14 +117,11 @@ public sealed class AutomationSystem : EntitySystem
 
     private void OnLoaderCollide(EntityUid uid, OuterRimLoaderComponent component, StartCollideEvent args)
     {
-        Logger.Debug("EA");
         if (args.OurFixture.ID != component.LoadingFixture)
             return;
 
         if (args.OtherFixture.Body.BodyType == BodyType.Static)
             return;
-
-        Logger.Debug("AE");
 
         if (!TryComp<OuterRimTargetedComponent>(uid, out var targeted))
         {
@@ -94,6 +133,12 @@ public sealed class AutomationSystem : EntitySystem
         if (targeted.TargetEntity is not { } target)
             return; // No target, do nothing.
 
+        if (Deleted(target) || Terminating(target))
+            return; // It's dead, jim.
+
+        if (!Transform(target).Coordinates.TryDistance(EntityManager, Transform(uid).Coordinates, out var dist) || dist > 1.2f)
+            return; // Too far.
+
 
         var used = args.OtherFixture.Body.Owner;
 
@@ -102,15 +147,6 @@ public sealed class AutomationSystem : EntitySystem
         RaiseLocalEvent(target, ref loaderEv);
 
         if (loaderEv.Handled)
-            return; // Okay, we're done.
-
-        // Legacy path!
-
-        var interactUsing = new InteractUsingEvent(uid, used, target, Transform(target).Coordinates);
-
-        RaiseLocalEvent(target, interactUsing);
-
-        if (interactUsing.Handled)
             // ReSharper disable once RedundantJumpStatement
             return; // Technically redundant, but makes it clear we should care if more is added.
     }

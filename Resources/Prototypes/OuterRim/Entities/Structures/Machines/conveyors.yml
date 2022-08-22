@@ -1,7 +1,7 @@
 ﻿- type: entity
   id: ConveyorLoader
   parent: ConveyorBelt
-  name: Loader
+  name: loading conveyor
   description: It loads things into other things. Use a multitool to change it's target if there's multiple destinations in a tile.
   components:
   - type: Fixtures
