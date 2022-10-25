@@ -591,8 +591,61 @@
   id: FloorSteelDirty
   name: tiles-dirty-steel-floor
   sprite: /Textures/Tiles/steel_dirty.png
+  variants: 4
+  placementVariants: [ 0, 1, 2, 3 ]
   baseTurfs:
   - Plating
+  isSubfloor: false
+  canCrowbar: true
+  footstepSounds:
+    collection: FootstepPlating
+  friction: 0.30
+  itemDrop: FloorTileItemDirty
+  thermalConductivity: 0.04
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorSteelMossy
+  name: tiles-mossy-steel-floor
+  sprite: /Textures/Tiles/steel_mossy.png
+  variants: 4
+  placementVariants: [ 0, 1, 2, 3 ]
+  baseTurfs:
+    - Plating
+  isSubfloor: false
+  canCrowbar: true
+  footstepSounds:
+    collection: FootstepPlating
+  friction: 0.30
+  itemDrop: FloorTileItemDirty
+  thermalConductivity: 0.04
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorWhiteDirty
+  name: tiles-dirty-white-floor
+  sprite: /Textures/Tiles/white_dirty.png
+  variants: 4
+  placementVariants: [ 0, 1, 2, 3 ]
+  baseTurfs:
+    - Plating
+  isSubfloor: false
+  canCrowbar: true
+  footstepSounds:
+    collection: FootstepPlating
+  friction: 0.30
+  itemDrop: FloorTileItemDirty
+  thermalConductivity: 0.04
+  heatCapacity: 10000
+
+- type: tile
+  id: FloorDarkDirty
+  name: tiles-dirty-dark-floor
+  sprite: /Textures/Tiles/dark_dirty.png
+  variants: 4
+  placementVariants: [ 0, 1, 2, 3 ]
+  baseTurfs:
+    - Plating
   isSubfloor: false
   canCrowbar: true
   footstepSounds:
