@@ -39,6 +39,8 @@ namespace Content.Server.Light.EntitySystems
         [Dependency] private readonly SignalLinkerSystem _signalSystem = default!;
         [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
         [Dependency] private readonly DoAfterSystem _doAfterSystem = default!;
+        [Dependency] private readonly SharedAudioSystem _audio = default!;
+        [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
         private static readonly TimeSpan ThunkDelay = TimeSpan.FromSeconds(2);
         public const string LightBulbContainer = "light_bulb";
@@ -110,7 +112,7 @@ namespace Content.Server.Light.EntitySystems
                 var res = heatResist.GetHeatResistance();
 
                 // check heat resistance against user
-                var burnedHand = light.CurrentLit && res < lightBulb.BurningTemperature;
+                var burnedHand = light.CurrentLit && res < lightBulb.Configs[lightBulb.ActiveConfig].BurningTemperature;
                 if (burnedHand)
                 {
                     // apply damage to users hands and show message with sound
@@ -120,10 +122,12 @@ namespace Content.Server.Light.EntitySystems
                     var damage = _damageableSystem.TryChangeDamage(userUid, light.Damage, origin: userUid);
 
                     if (damage != null)
+                    {
                         _adminLogger.Add(LogType.Damaged,
                             $"{ToPrettyString(args.User):user} burned their hand on {ToPrettyString(args.Target):target} and received {damage.Total:damage} damage");
+                    }
 
-                    SoundSystem.Play(light.BurnHandSound.GetSound(), Filter.Pvs(uid), uid);
+                    _audio.Play(light.BurnHandSound, Filter.Pvs(uid), uid);
 
                     args.Handled = true;
                     return;
@@ -140,7 +144,7 @@ namespace Content.Server.Light.EntitySystems
 
             // removing a working bulb, so require a delay
             light.CancelToken = new CancellationTokenSource();
-            _doAfterSystem.DoAfter(new DoAfterEventArgs((EntityUid) userUid, light.EjectBulbDelay, light.CancelToken.Token, uid)
+            _doAfterSystem.DoAfter(new DoAfterEventArgs(userUid, light.EjectBulbDelay, light.CancelToken.Token, uid)
             {
                 BreakOnUserMove = true,
                 BreakOnDamage = true,
@@ -270,43 +274,45 @@ namespace Content.Server.Light.EntitySystems
             {
                 SetLight(uid, false, light: light);
                 powerReceiver.Load = 0;
-                appearance?.SetData(PoweredLightVisuals.BulbState, PoweredLightState.Empty);
-                return;
+                _appearance.SetData(uid, PoweredLightVisuals.BulbState, PoweredLightState.Empty, appearance);
             }
             else
             {
+                var config = lightBulb.Configs[lightBulb.ActiveConfig];
 
                 switch (lightBulb.State)
                 {
                     case LightBulbState.Normal:
                         if (powerReceiver.Powered && light.On)
                         {
-                            SetLight(uid, true, lightBulb.Color, light, lightBulb.LightRadius, lightBulb.LightEnergy, lightBulb.LightSoftness);
-                            appearance?.SetData(PoweredLightVisuals.BulbState, PoweredLightState.On);
+                            SetLight(uid, true, config.Color, light, config.LightRadius, config.LightEnergy, config.LightSoftness);
+                            _appearance.SetData(uid, PoweredLightVisuals.BulbState, PoweredLightState.On, appearance);
                             var time = _gameTiming.CurTime;
                             if (time > light.LastThunk + ThunkDelay)
                             {
                                 light.LastThunk = time;
-                                SoundSystem.Play(light.TurnOnSound.GetSound(), Filter.Pvs(uid), uid, AudioParams.Default.WithVolume(-10f));
+                                _audio.Play(light.TurnOnSound, Filter.Pvs(uid), uid, AudioParams.Default.WithVolume(-10f));
                             }
                         }
                         else
                         {
                             SetLight(uid, false, light: light);
-                            appearance?.SetData(PoweredLightVisuals.BulbState, PoweredLightState.Off);
+                            _appearance.SetData(uid, PoweredLightVisuals.BulbState, PoweredLightState.Off, appearance);
                         }
                         break;
                     case LightBulbState.Broken:
                         SetLight(uid, false, light: light);
-                        appearance?.SetData(PoweredLightVisuals.BulbState, PoweredLightState.Broken);
+                        _appearance.SetData(uid, PoweredLightVisuals.BulbState, PoweredLightState.Broken, appearance);
                         break;
                     case LightBulbState.Burned:
                         SetLight(uid, false, light: light);
-                        appearance?.SetData(PoweredLightVisuals.BulbState, PoweredLightState.Burned);
+                        _appearance.SetData(uid, PoweredLightVisuals.BulbState, PoweredLightState.Burned, appearance);
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
-                powerReceiver.Load = (light.On && lightBulb.State == LightBulbState.Normal) ? lightBulb.PowerUse : 0;
+                powerReceiver.Load = (light.On && lightBulb.State == LightBulbState.Normal) ? config.PowerUse : 0;
             }
         }
 
@@ -359,9 +365,7 @@ namespace Content.Server.Light.EntitySystems
 
             light.IsBlinking = isNowBlinking;
 
-            if (!EntityManager.TryGetComponent(light.Owner, out AppearanceComponent? appearance))
-                return;
-            appearance.SetData(PoweredLightVisuals.Blinking, isNowBlinking);
+            _appearance.SetData(light.Owner, PoweredLightVisuals.Blinking, isNowBlinking);
         }
 
         private void OnSignalReceived(EntityUid uid, PoweredLightComponent component, SignalReceivedEvent args)
@@ -380,8 +384,10 @@ namespace Content.Server.Light.EntitySystems
         /// </summary>
         private void OnPacketReceived(EntityUid uid, PoweredLightComponent component, DeviceNetworkPacketEvent args)
         {
-            if (!args.Data.TryGetValue(DeviceNetworkConstants.Command, out string? command) || command != DeviceNetworkConstants.CmdSetState) return;
-            if (!args.Data.TryGetValue(DeviceNetworkConstants.StateEnabled, out bool enabled)) return;
+            if (!args.Data.TryGetValue(DeviceNetworkConstants.Command, out string? command) || command != DeviceNetworkConstants.CmdSetState)
+                return;
+            if (!args.Data.TryGetValue(DeviceNetworkConstants.StateEnabled, out bool enabled))
+                return;
 
             SetState(uid, enabled, component);
         }

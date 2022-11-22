@@ -10,14 +10,30 @@ namespace Content.Server.Light.Components
     [RegisterComponent, Access(typeof(LightBulbSystem))]
     public sealed class LightBulbComponent : Component
     {
-        [DataField("color")]
-        public Color Color = Color.White;
+        [DataField("visualConfigs", required: true)]
+        public Dictionary<string, LightBulbVisualConfig> Configs = default!;
+
+        [DataField("activeConfig", required: true)]
+        public string ActiveConfig = default!;
 
         [DataField("bulb")]
         public LightBulbType Type = LightBulbType.Tube;
 
         [DataField("startingState")]
         public LightBulbState State = LightBulbState.Normal;
+
+        [DataField("breakSound")]
+        public SoundSpecifier BreakSound = new SoundCollectionSpecifier("GlassBreak");
+    }
+
+    [DataDefinition]
+    public sealed class LightBulbVisualConfig
+    {
+        [DataField("name", required: true)]
+        public string Name = default!;
+
+        [DataField("color")]
+        public Color Color = Color.White;
 
         [DataField("BurningTemperature")]
         public int BurningTemperature = 1400;
@@ -33,8 +49,5 @@ namespace Content.Server.Light.Components
 
         [DataField("PowerUse")]
         public int PowerUse = 60;
-
-        [DataField("breakSound")]
-        public SoundSpecifier BreakSound = new SoundCollectionSpecifier("GlassBreak");
     }
 }
