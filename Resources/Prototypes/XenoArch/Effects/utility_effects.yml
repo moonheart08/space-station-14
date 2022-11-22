@@ -83,7 +83,6 @@
       path: /Audio/Weapons/bladeslice.ogg
   - type: Sharp
 
-
 - type: artifactEffect
   id: EffectPowerGen20K
   targetDepth: 3
@@ -91,6 +90,7 @@
   blacklist:
     components:
     - Item
+
   permanentComponents:
   - type: PowerSupplier
     supplyRate: 20000

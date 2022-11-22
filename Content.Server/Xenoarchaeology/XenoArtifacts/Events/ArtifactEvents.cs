@@ -4,28 +4,11 @@ namespace Content.Server.Xenoarchaeology.XenoArtifacts.Events;
 ///     Invokes when artifact was successfully activated.
 ///     Used to start attached effects.
 /// </summary>
-public sealed class ArtifactActivatedEvent : EntityEventArgs
-{
-    /// <summary>
-    ///     Entity that activate this artifact.
-    ///     Usually player, but can also be another object.
-    /// </summary>
-    public EntityUid? Activator;
-}
+/// <param name="Activator">Entity that activated the artifact if any.</param>
+public readonly record struct ArtifactActivatedEvent(EntityUid? Activator);
 
 /// <summary>
 ///     Force to randomize artifact triggers.
 /// </summary>
-public sealed class ArtifactNodeEnteredEvent : EntityEventArgs
-{
-    /// <summary>
-    /// An entity-specific seed that can be used to
-    /// generate random values.
-    /// </summary>
-    public readonly int RandomSeed;
-
-    public ArtifactNodeEnteredEvent(int randomSeed)
-    {
-        RandomSeed = randomSeed;
-    }
-}
+/// <param name="RandomSeed">An RNG seed that can be used to control random events for the given node.</param>
+public readonly record struct ArtifactNodeEnteredEvent(int RandomSeed);
