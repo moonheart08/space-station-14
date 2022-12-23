@@ -142,9 +142,9 @@ namespace Content.Server.Entry
                 _euiManager.Initialize();
 
                 IoCManager.Resolve<IGameMapManager>().Initialize();
-                IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>().PostInitialize();
                 IoCManager.Resolve<IBqlQueryManager>().DoAutoRegistrations();
                 IoCManager.Resolve<RoleBanManager>().Initialize();
+                IoCManager.Resolve<IEntityManager>().EventBus.RaiseEvent(EventSource.Local, new GamePostInitEvent());
             }
         }
 
@@ -217,3 +217,5 @@ namespace Content.Server.Entry
         }
     }
 }
+
+public readonly record struct GamePostInitEvent;

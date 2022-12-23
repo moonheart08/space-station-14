@@ -285,6 +285,12 @@ namespace Content.Shared.CCVar
             CVarDef.Create("game.round_start_fail_shutdown_count", 5, CVar.SERVERONLY | CVar.SERVER);
 #endif
 
+        /// <summary>
+        ///     The entity prototype to use for the round.
+        /// </summary>
+        public static readonly CVarDef<string>
+            GameRoundPrototype = CVarDef.Create("game.game_round_prototype", "Default", CVar.ARCHIVE | CVar.SERVERONLY);
+
         /*
          * Discord
          */
