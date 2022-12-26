@@ -61,7 +61,6 @@ public sealed class ShipSpawningSystem : BaseWorldSystem
             };
 
             _gameTicker.LoadGameMap(proto, coords.MapId, loadOpts);
-
         }
     }
 
