@@ -1,8 +1,11 @@
 using System.Linq;
+using Content.Client.Administration.Managers;
+using Content.Client.Guidebook;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Events;
 using Content.Shared.GameTicking;
 using Robust.Shared.Network;
+using Robust.Shared.Utility;
 
 namespace Content.Client.Administration.Systems
 {
@@ -28,6 +31,16 @@ namespace Content.Client.Administration.Systems
             InitializeOverlay();
             SubscribeNetworkEvent<FullPlayerListEvent>(OnPlayerListChanged);
             SubscribeNetworkEvent<PlayerInfoChangedEvent>(OnPlayerInfoChanged);
+            SubscribeLocalEvent<GetGuidesEvent>(OnGetGuides);
+        }
+
+        private void OnGetGuides(GetGuidesEvent ev)
+        {
+            foreach (var (key, guide) in ev.Guides.ShallowClone())
+            {
+                if (guide.RequiresAdmin && !_adminManager.IsActive())
+                    ev.Guides.Remove(key);
+            }
         }
 
         public override void Shutdown()

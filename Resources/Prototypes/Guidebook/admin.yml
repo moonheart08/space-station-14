@@ -1,0 +1,6 @@
+﻿- type: guideEntry
+  id: Administration
+  name: guide-entry-admin
+  text: "/Server Info/Guidebook/Admin/Administration.xml"
+  priority: -100
+  requiresAdmin: true

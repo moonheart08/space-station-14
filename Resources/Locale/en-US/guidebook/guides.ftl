@@ -11,6 +11,7 @@ guide-entry-radio = Radio
 guide-entry-jobs = Jobs
 guide-entry-survival = Survival
 guide-entry-ss14 = Space Station 14
+guide-entry-admin = Administration
 
 guide-entry-science = Science
 guide-entry-anomalous-research = Anomalous Research
