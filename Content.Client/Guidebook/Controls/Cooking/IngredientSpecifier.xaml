@@ -1,0 +1,6 @@
+﻿<BoxContainer xmlns="https://spacestation14.io"
+              xmlns:guidebook="clr-namespace:Content.Client.Guidebook.Controls"
+              Orientation="Horizontal">
+    <guidebook:GuideEntityEmbed Scale="2, 2"/>
+    <RichTextLabel Name="IngredientName"/>
+</BoxContainer>
