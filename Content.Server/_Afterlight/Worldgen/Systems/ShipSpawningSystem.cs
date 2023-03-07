@@ -137,7 +137,9 @@ public sealed class ShipSpawningSystem : BaseWorldSystem
 
     public override void Update(float frameTime)
     {
-        foreach (var comp in EntityQuery<ShipSpawningComponent>())
+        var query = EntityQueryEnumerator<ShipSpawningComponent>();
+
+        while (query.MoveNext(out var uid, out var comp))
         {
             if (comp.Setup)
                 continue;
@@ -147,7 +149,8 @@ public sealed class ShipSpawningSystem : BaseWorldSystem
                 for (var j = -comp.LoadedSpawnArea; j < comp.LoadedSpawnArea; j++)
                 {
                     var cCoords = new Vector2i(i, j);
-                    var chunk = GetOrCreateChunk(cCoords, comp.Owner);
+                    var chunk = GetOrCreateChunk(cCoords, uid);
+
                     if (!TryComp<DebrisFeaturePlacerControllerComponent>(chunk, out var debris))
                     {
                         continue;
@@ -155,7 +158,8 @@ public sealed class ShipSpawningSystem : BaseWorldSystem
 
                     if (debris.OwnedDebris.Count != 0)
                         continue;
-                    comp.FreeCoordinates.Add(new MapCoordinates(WorldGen.ChunkToWorldCoordsCentered(cCoords), Comp<MapComponent>(comp.Owner).WorldMap));
+
+                    comp.FreeCoordinates.Add(new MapCoordinates(WorldGen.ChunkToWorldCoordsCentered(cCoords), Comp<MapComponent>(uid).WorldMap));
                 }
             }
 
