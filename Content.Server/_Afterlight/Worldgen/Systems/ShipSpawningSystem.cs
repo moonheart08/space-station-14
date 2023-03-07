@@ -76,6 +76,7 @@ public sealed class ShipSpawningSystem : BaseWorldSystem
             slotsLeft -= slotsToRemove;
 
             ev.Maps.Add(map);
+            return; // HACK: I don't wanna fix this up atm so just only spawn one.
         }
     }
 
