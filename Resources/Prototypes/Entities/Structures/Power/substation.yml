@@ -19,7 +19,7 @@
       shader: unshaded
   - type: UpgradeBattery
     maxChargeMultiplier: 2
-    baseMaxCharge: 2500000
+    baseMaxCharge: 108000000
   - type: Battery
     startingCharge: 0
   - type: ExaminableBattery
