@@ -168,7 +168,7 @@ namespace Content.Shared.Atmos
         /// <summary>
         ///     Total number of gases. Increase this if you want to add more!
         /// </summary>
-        public const int TotalNumberOfGases = 9;
+        public const int TotalNumberOfGases = 11;
 
         /// <summary>
         ///     This is the actual length of the gases arrays in mixtures.
@@ -317,6 +317,8 @@ namespace Content.Shared.Atmos
         WaterVapor = 5,
         Miasma = 6,
         NitrousOxide = 7,
-        Frezon = 8
+        Frezon = 8,
+        Hydrogen = 9,
+        Helium = 10,
     }
 }
