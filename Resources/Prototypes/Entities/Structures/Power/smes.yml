@@ -46,7 +46,7 @@
       node: input
     - type: PowerNetworkBattery
       maxSupply: 150000
-      maxChargeRate: 5000
+      maxChargeRate: 50000
       supplyRampTolerance: 5000
       supplyRampRate: 1000
     - type: PointLight
