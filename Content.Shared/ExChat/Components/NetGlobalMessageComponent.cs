@@ -6,7 +6,7 @@ namespace Content.Shared.ExChat.Components;
 /// This is used for messages that get immediately sent over the network,
 /// </summary>
 [RegisterComponent, NetworkedComponent]
-public sealed class NetGlobalMessageComponent : Component
+public sealed partial class NetGlobalMessageComponent : Component
 {
 
 }
