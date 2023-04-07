@@ -8,7 +8,7 @@ namespace Content.Shared.ExChat.Components;
 /// This is used for ear spatial queries.
 /// </summary>
 [RegisterComponent]
-public sealed class EarsTreeComponent : Component, IComponentTreeComponent<AmbientSoundComponent>
+public sealed class EarsTreeComponent : Component, IComponentTreeComponent<EarsComponent>
 {
-    public DynamicTree<ComponentTreeEntry<AmbientSoundComponent>> Tree { get; set; } = default!;
+    public DynamicTree<ComponentTreeEntry<EarsComponent>> Tree { get; set; } = default!;
 }
